@@ -16,12 +16,20 @@ import { HttpExceptionsFilter } from './common/exceptions/http.exception.filter'
 
 import { generateDocument } from './doc';
 
+// 日志打印
+import fastify from 'fastify';
+import { FastifyLogger } from './common/logger';
+
 declare const module: any;
 
 async function bootstrap() {
+  const fastifyInstance = fastify({
+    logger: FastifyLogger,
+  });
+
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    new FastifyAdapter({ logger: true }),
+    new FastifyAdapter(fastifyInstance),
   );
 
   // 统一响应体格式
